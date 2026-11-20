@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA COFFEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #1a1614; color: #fff; }
+
+        /* ШАПКА */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px;
+            background-color: rgba(20, 16, 14, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
+        nav a { color: #aaa; text-decoration: none; margin: 0 15px; font-size: 14px; transition: 0.3s; }
+        nav a:hover { color: #fff; }
+        .btn-nav {
+            background: #c49a6c; color: #fff; padding: 10px 25px; border-radius: 5px;
+            text-decoration: none; font-size: 14px; font-weight: 600;
+            transition: 0.3s; border: none; cursor: pointer;
+        }
+        .btn-nav:hover { background: #a87b4a; }
+
+        /* ГЛАВНЫЙ ЭКРАН */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(26, 22, 20, 0.6), rgba(26, 22, 20, 0.9)), url('bg.jpg');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 110px; font-weight: 400; letter-spacing: 5px; text-transform: uppercase;
+            margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .hero p { font-size: 18px; color: #ddd; margin-bottom: 40px; max-width: 600px; line-height: 1.6; }
+        .btn-main {
+            background: #c49a6c; color: white; padding: 18px 45px; border-radius: 5px;
+            text-decoration: none; font-size: 16px; font-weight: 600;
+            transition: transform 0.3s, background 0.3s;
+        }
+        .btn-main:hover { background: #a87b4a; transform: translateY(-3px); }
+
+        /* АНИМАЦИЯ */
+        .fade-in { opacity: 0; transform: translateY(50px); transition: opacity 1s ease-out, transform 1s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* БЛОК О КОФЕЙНЕ */
+        .about-section {
+            padding: 120px 50px; background-color: #221d19;
+            display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap;
+        }
+        .about-text { max-width: 500px; }
+        .about-text h2 { font-family: 'Playfair Display', serif; font-size: 48px; margin-bottom: 20px; color: #c49a6c; }
+        .about-text p { color: #bbb; line-height: 1.8; font-size: 16px; margin-bottom: 15px; }
+        .about-image {
+            width: 400px; height: 400px;
+            background: url('about.jpg') center/cover;
+            border-radius: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        /* МЕНЮ */
+        .menu-section { padding: 120px 50px; background-color: #1a1614; text-align: center; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 48px; margin-bottom: 60px; color: #fff; }
+        .menu-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; }
+        .menu-card {
+            background: #2a2421; padding: 0; border-radius: 10px; width: 300px;
+            transition: all 0.4s ease; border: 1px solid rgba(196, 154, 108, 0.2);
+            overflow: hidden;
+        }
+        .menu-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.6); border-color: #c49a6c; }
+        .menu-card img { width: 100%; height: 200px; object-fit: cover; transition: transform 0.5s ease; }
+        .menu-card:hover img { transform: scale(1.1); }
+        .menu-card-content { padding: 20px; }
+        .menu-card h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; color: #fff; }
+        .menu-card p { color: #999; font-size: 14px; margin-bottom: 15px; }
+        .price { font-size: 20px; font-weight: 600; color: #c49a6c; }
+
+        /* ОТЗЫВЫ */
+        .reviews-section { padding: 100px 50px; background-color: #221d19; text-align: center; }
+        .reviews-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; }
+        .review-card {
+            background: #2a2421; padding: 30px; border-radius: 10px; width: 320px;
+            text-align: left; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .review-header { display: flex; align-items: center; margin-bottom: 15px; }
+        .avatar {
+            width: 50px; height: 50px; border-radius: 50%;
+            background-color: #c49a6c; color: #1a1614;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px; font-weight: bold; margin-right: 15px;
+        }
+        .review-author { font-weight: 600; font-size: 16px; }
+        .review-stars { color: #ffb800; font-size: 14px; margin-top: 3px; }
+        .review-text { color: #bbb; font-size: 14px; line-height: 1.6; font-style: italic; }
+        .yandex-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: #fff; color: #000; padding: 10px 20px;
+            border-radius: 30px; font-weight: 600; margin-bottom: 40px;
+            font-size: 14px;
+        }
+
+        /* КОНТАКТЫ / ПОДВАЛ */
+        footer {
+            padding: 80px 50px; background: #140f0d; text-align: center;
+            border-top: 1px solid rgba(196, 154, 108, 0.2);
+        }
+        footer h3 { font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 20px; color: #c49a6c; }
+        .contact-info { font-size: 18px; margin-bottom: 30px; color: #fff; line-height: 1.8; }
+        
+        .social-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .social-btn {
+            display: inline-block; padding: 12px 25px; border-radius: 5px;
+            text-decoration: none; font-weight: 600; font-size: 14px;
+            transition: 0.3s; color: #fff;
+        }
+        .whatsapp { background-color: #25D366; }
+        .whatsapp:hover { background-color: #1ebd5a; }
+        .telegram { background-color: #0088cc; }
+        .telegram:hover { background-color: #0077b3; }
+        
+        .copyright { color: #666; font-size: 12px; margin-top: 30px; }
+
+        /* МОДАЛЬНОЕ ОКНО (БРОНЬ) */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: #2a2421; padding: 40px; border-radius: 10px;
+            width: 90%; max-width: 400px; text-align: center; position: relative;
+            border: 1px solid #c49a6c;
+        }
+        .modal-content h3 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 20px; color: #c49a6c; }
+        .modal-content input {
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 5px;
+            border: 1px solid #444; background: #1a1614; color: #fff; font-family: 'Montserrat';
+        }
+        .modal-content button {
+            width: 100%; padding: 15px; background: #c49a6c; color: #fff;
+            border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; margin-top: 10px;
+        }
+        .modal-content button:hover { background: #a87b4a; }
+        .close-btn {
+            position: absolute; top: 15px; right: 20px; font-size: 24px;
+            cursor: pointer; color: #aaa; transition: 0.3s;
+        }
+        .close-btn:hover { color: #fff; }
+
+        /* ЧЕКБОКС СОГЛАСИЯ */
+        .checkbox-container {
+            display: flex; align-items: flex-start; gap: 10px;
+            text-align: left; font-size: 12px; color: #999; margin-bottom: 15px;
+        }
+        .checkbox-container input { width: auto; margin-top: 2px; cursor: pointer; }
+        .checkbox-container a { color: #c49a6c; text-decoration: none; }
+        .checkbox-container a:hover { text-decoration: underline; }
+
+        /* КУКИ-БАННЕР */
+        .cookie-banner {
+            position: fixed; bottom: 20px; left: 20px; right: 20px;
+            background: #2a2421; padding: 20px; border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center; gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid #c49a6c;
+            z-index: 1000; flex-wrap: wrap; display: none; /* Скрыт по умолчанию */
+        }
+        .cookie-banner p { font-size: 14px; color: #ddd; margin: 0; }
+        .cookie-banner button {
+            background: #c49a6c; color: #fff; border: none; padding: 10px 25px;
+            border-radius: 5px; cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        .cookie-banner button:hover { background: #a87b4a; }
+                        /* АДАПТИВ ДЛЯ ТЕЛЕФОНОВ */
+        @media (max-width: 768px) {
+            /* Шапка — делаем компактной */
+            header {
+                padding: 10px 15px;
+                flex-direction: row; /* Логотип и кнопка в одну строку */
+                flex-wrap: wrap; /* Позволяем меню перенестись ниже */
+                justify-content: space-between;
+            }
+            .logo {
+                font-size: 20px;
+            }
+            nav {
+                width: 100%; /* Меню на всю ширину */
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                order: 3; /* Меню спускаем вниз */
+                margin-top: 10px;
+            }
+            nav a {
+                margin: 0;
+                font-size: 12px;
+            }
+            .btn-nav {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            /* Главный экран */
+            .hero h1 {
+                font-size: 50px; 
+            }
+            .hero p {
+                font-size: 14px;
+                padding: 0 15px;
+            }
+
+            /* Блок о нас */
+            .about-section {
+                padding: 40px 20px;
+            }
+            .about-text h2 {
+                font-size: 30px;
+            }
+            .about-image {
+                width: 100%;
+                height: 250px;
+            }
+
+            /* Меню, Отзывы, Контакты */
+            .menu-section, .reviews-section, footer {
+                padding: 40px 20px;
+            }
+            .section-title, footer h3 {
+                font-size: 30px;
+                margin-bottom: 30px;
+            }
+
+            /* Отзывы и соцсети в столбик */
+            .reviews-container, .social-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            .review-card, .social-btn {
+                width: 100%;
+                text-align: center;
+            }
+            .review-card {
+                text-align: left;
+            }
+
+            /* Модальное окно */
+            .modal-content {
+                padding: 20px;
+            }
+            
+            /* Куки-баннер */
+            .cookie-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            .cookie-banner button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AURA COFFEE</div>
+        <nav>
+            <a href="#about">О нас</a>
+            <a href="#menu">Меню</a>
+            <a href="#reviews">Отзывы</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+        <button class="btn-nav" onclick="openModal()">Забронировать</button>
+    </header>
+
+    <section class="hero">
+        <h1>AURA</h1>
+        <p>Место, где каждая чашка кофе — это искусство. Загляни к нам за вдохновением.</p>
+        <a href="#menu" class="btn-main">Смотреть меню</a>
+    </section>
+
+    <section id="about" class="about-section fade-in">
+        <div class="about-text">
+            <h2>Наша философия</h2>
+            <p>Мы открылись в 2020 году с простой идеей — варить лучший кофе в городе. За это время мы научились обжаривать зерна собственноручно, чтобы вы чувствовали каждую ноту вкуса.</p>
+            <p>Мы используем только 100% арабику высшего сорта, привезенную из Эфиопии и Колумбии. Каждая чашка готовится с любовью и вниманием к деталям.</p>
+        </div>
+        <div class="about-image"></div>
+    </section>
+
+    <section id="menu" class="menu-section fade-in">
+        <h2 class="section-title">Наше Меню</h2>
+        <div class="menu-grid">
+            <div class="menu-card">
+                <img src="coffee1.jpg" alt="Капучино">
+                <div class="menu-card-content">
+                    <h3>Капучино</h3>
+                    <p>Классика с идеальной молочной пенкой</p>
+                    <span class="price">250 ₽</span>
+                </div>
+            </div>
+            <div class="menu-card">
+                <img src="coffee2.jpg" alt="Латте">
+                <div class="menu-card-content">
+                    <h3>Латте</h3>
+                    <p>Нежный, с добавлением ванильного сиропа</p>
+                    <span class="price">280 ₽</span>
+                </div>
+            </div>
+            <div class="menu-card">
+                <img src="coffee3.jpg" alt="Флэт Уайт">
+                <div class="menu-card-content">
+                    <h3>Флэт Уайт</h3>
+                    <p>Двойной эспрессо с тонким слоем молока</p>
+                    <span class="price">300 ₽</span>
+                </div>
+            </div>
+            <div class="menu-card">
+                <img src="croissant.jpg" alt="Круассан">
+                <div class="menu-card-content">
+                    <h3>Круассан</h3>
+                    <p>Свежая выпечка с миндалем</p>
+                    <span class="price">180 ₽</span>
+                </div>
+            </div>
+            <div class="menu-card">
+                <img src="cheesecake.jpg" alt="Шоколадный торт">
+                <div class="menu-card-content">
+                    <h3>Шоколадный торт</h3>
+                    <p>Насыщенный шоколадный бисквит с ганашем</p>
+                    <span class="price">350 ₽</span>
+                </div>
+            </div>
+            <div class="menu-card">
+                <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=600&auto=format&fit=crop" alt="Брауни">
+                <div class="menu-card-content">
+                    <h3>Брауни</h3>
+                    <p>Теплый шоколадный брауни с жидкой начинкой</p>
+                    <span class="price">200 ₽</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="reviews-section fade-in">
+        <h2 class="section-title">Отзывы</h2>
+        <div class="yandex-badge">
+            <span style="color: #fc3f1d; font-weight: bold; font-size: 18px;">Я</span> Отзывы на Яндекс Картах
+        </div>
+        <div class="reviews-container">
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar">А</div>
+                    <div>
+                        <div class="review-author">Алексей</div>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">"Лучший капучино в городе! Атмосфера уютная, персонал вежливый. Теперь хожу сюда каждое утро перед работой."</p>
+            </div>
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar" style="background: #9b51e0;">М</div>
+                    <div>
+                        <div class="review-author">Мария</div>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">"Брала круассан и флэт уайт. Очень вкусно, чувствуется качественное зерно. Дизайн внутри просто космос!"</p>
+            </div>
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="avatar" style="background: #2f80ed;">Д</div>
+                    <div>
+                        <div class="review-author">Дмитрий</div>
+                        <div class="review-stars">★★★★☆</div>
+                    </div>
+                </div>
+                <p class="review-text">"Хорошее место, чтобы поработать за ноутбуком. Есть розетки и быстрый Wi-Fi. Цены чуть выше среднего, но оно того стоит."</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contacts" class="fade-in">
+        <h3>Ждем вас в гости</h3>
+        <div class="contact-info">
+            г. Москва, ул. Кофейная, д. 15<br><br>
+            Телефон: <a href="tel:+79991234567" style="color: #c49a6c; text-decoration: none;">+7 (999) 123-45-67</a><br>
+            Работаем ежедневно с 08:00 до 22:00
+        </div>
+        
+        <div class="social-buttons">
+            <a href="https://wa.me/79991234567" target="_blank" class="social-btn whatsapp">Написать в WhatsApp</a>
+            <a href="https://t.me/aura_coffee" target="_blank" class="social-btn telegram">Написать в Telegram</a>
+        </div>
+
+        <div class="copyright">
+            © 2026 AURA COFFEE. Все права защищены.
+        </div>
+    </footer>
+
+    <!-- МОДАЛЬНОЕ ОКНО (с чекбоксом согласия) -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3>Забронировать столик</h3>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 14px;">Оставьте свой номер, и мы перезвоним.</p>
+            <input type="text" placeholder="Ваше имя">
+            <input type="tel" placeholder="Номер телефона">
+            
+            <!-- Чекбокс согласия -->
+            <div class="checkbox-container">
+                <input type="checkbox" id="agreeCheckbox">
+                <label for="agreeCheckbox">Я согласен с <a href="#">политикой конфиденциальности</a> и обработкой персональных данных</label>
+            </div>
+
+            <button onclick="submitBooking()">Отправить заявку</button>
+        </div>
+    </div>
+
+    <!-- КУКИ-БАННЕР -->
+    <div class="cookie-banner" id="cookieBanner">
+        <p>Мы используем файлы cookie для улучшения работы сайта. Продолжая просмотр, вы соглашаетесь с нашей политикой.</p>
+        <button onclick="acceptCookies()">Принять</button>
+    </div>
+
+    <script>
+        // Анимация при скролле
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = { threshold: 0.2 };
+        const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            });
+        }, appearOptions);
+        faders.forEach(fader => { appearOnScroll.observe(fader); });
+
+        // Модальное окно
+        const modal = document.getElementById('bookingModal');
+        function openModal() { modal.style.display = 'flex'; }
+        function closeModal() { modal.style.display = 'none'; }
+        window.onclick = function(event) {
+            if (event.target == modal) { closeModal(); }
+        }
+
+        // Отправка формы с проверкой галочки
+                function submitBooking() {
+            const isChecked = document.getElementById('agreeCheckbox').checked;
+            const inputs = document.querySelectorAll('.modal-content input');
+            const nameValue = inputs[0].value;
+            const phoneValue = inputs[1].value;
+
+            // 1. Проверяем галочку
+            if (!isChecked) {
+                alert('Пожалуйста, согласитесь с политикой конфиденциальности.');
+                return;
+            }
+
+            // 2. Проверяем, заполнены ли поля (чтобы не отправлять пустоту)
+            if (nameValue.trim() === '' || phoneValue.trim() === '') {
+                alert('Пожалуйста, заполните имя и номер телефона.');
+                return;
+            }
+
+            // 3. Показываем сообщение, что это демо-режим
+            alert('Это демонстрационный сайт! Данные никуда не отправляются. В реальной версии здесь бы приходила заявка администратору.');
+            
+            // 4. Очищаем поля и закрываем окно
+            inputs[0].value = '';
+            inputs[1].value = '';
+            document.getElementById('agreeCheckbox').checked = false;
+            closeModal();
+        }
+
+        // Куки-баннер
+        const cookieBanner = document.getElementById('cookieBanner');
+        
+        // Проверяем, принял ли пользователь куки ранее
+        if (!localStorage.getItem('cookiesAccepted')) {
+            // Если нет - показываем баннер через 1 секунду после загрузки
+            setTimeout(() => {
+                cookieBanner.style.display = 'flex';
+            }, 1000);
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            cookieBanner.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
